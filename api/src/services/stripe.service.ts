@@ -1,3 +1,6 @@
+import dotenv from 'dotenv';
+dotenv.config();
+
 // services/stripe.service.ts
 import Stripe from 'stripe';
 
