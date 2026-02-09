@@ -18,6 +18,12 @@ const VideoPlayerScreen: React.FC = () => {
   const navigate = useNavigate();
   const videoRef = useRef<HTMLVideoElement>(null);
 
+  // Helper to get full video URL
+  const getVideoUrl = (videoPath: string) => {
+    const baseUrl = import.meta.env.VITE_PUBLIC_BASE_URL || '';
+    return `${baseUrl}${videoPath}`;
+  };
+
   // State management
   const [videoWatched, setVideoWatched] = useState(false);
   const [showRewardModal, setShowRewardModal] = useState(false);
@@ -333,7 +339,7 @@ const VideoPlayerScreen: React.FC = () => {
               poster={task.thumbnail}
               preload="metadata"
             >
-              <source src={task.videoUrl} type="video/mp4" />
+              <source src={getVideoUrl(task.videoUrl)} type="video/mp4" />
               Your browser does not support the video tag.
             </video>
           )}

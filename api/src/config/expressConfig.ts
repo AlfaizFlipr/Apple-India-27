@@ -61,21 +61,21 @@ class ExpressConfig {
 
   private addGlobalMiddlewares() {
     const isProduction = process.env.NODE_ENV === 'production';
-    
+
     const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(',').map(origin => origin.trim()) || [];
-    
+
 
     const corsOptions = {
       origin: (origin: string | undefined, callback: Function) => {
-        
+
         if (!origin) {
           return callback(null, true);
         }
-        
+
         if (!isProduction) {
           return callback(null, true);
         }
-        
+
         // In production, check against whitelist
         if (allowedOrigins.includes(origin)) {
           callback(null, true);
@@ -97,9 +97,9 @@ class ExpressConfig {
 
     // Parse cookies
     this.app.use(cookieParser());
-    this.app.use(express.json());
-    this.app.use(bodyParser.urlencoded({ extended: true }));
-    
+    this.app.use(express.json({ limit: '100mb' }));
+    this.app.use(bodyParser.urlencoded({ limit: '100mb', extended: true }));
+
   }
 
   private staticServe() {

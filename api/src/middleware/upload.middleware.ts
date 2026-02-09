@@ -11,9 +11,9 @@ const aadhaarDir = 'uploads/aadhaar';
 const newsDir = 'uploads/conference-news';
 const profileDir = 'uploads/profile';
 const luckyDrawDir = 'uploads/lucky-draw';
-const qrCodeDir = 'uploads/qr-codes'; 
+const qrCodeDir = 'uploads/qr-codes';
 
-[videoDir, proofDir, aadhaarDir, newsDir,profileDir,luckyDrawDir,qrCodeDir].forEach((dir) => {
+[videoDir, proofDir, aadhaarDir, newsDir, profileDir, luckyDrawDir, qrCodeDir].forEach((dir) => {
   if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
 });
 
@@ -28,7 +28,9 @@ const videoStorage = multer.diskStorage({
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
     const ext = path.extname(file.originalname);
     const nameWithoutExt = path.basename(file.originalname, ext);
-    cb(null, `${nameWithoutExt}-${uniqueSuffix}${ext}`);
+    // Sanitize filename: replace spaces and special chars with hyphens
+    const sanitizedName = nameWithoutExt.replace(/[^a-zA-Z0-9]/g, '-').replace(/-+/g, '-');
+    cb(null, `${sanitizedName}-${uniqueSuffix}${ext}`);
   },
 });
 
@@ -202,7 +204,7 @@ const qrCodeFilter = (
 export const videoUpload = multer({
   storage: videoStorage,
   fileFilter: videoFilter,
-  limits: { fileSize: 100 * 1024 * 1024 }, // 100MB
+  limits: { fileSize: 500 * 1024 * 1024 }, // 500MB
 });
 
 export const paymentProofUpload = multer({
